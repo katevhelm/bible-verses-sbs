@@ -5,7 +5,7 @@ const VerseSelect = (props) => {
     <div>
       <p>Choose a verse:</p>
       <form>
-        <label for="books">Books</label>
+        <label htmlFor="books">Books</label>
         <select name="books" id="books">
           <option value="genesis">Genesis</option>
           <option value="exodus">Exodus</option>
