@@ -19,15 +19,20 @@ class App extends React.Component {
   }
 
   dataFetching = async (query) => {
-    const response = await bible.get(`/${query}`);
-    console.log(response);
+    const bibles = await bible.get();
+    const books = await bible.get(`/${query}/books`);
+    this.setState({
+      bibles: bibles,
+      books: books.data.data,
+    });
+    console.log(this.state.books);
   };
 
   render() {
     return (
       <div>
         <h1>Bible Verses Side by Side</h1>
-        <VerseSelect />
+        <VerseSelect books={this.state.books} />
       </div>
     );
   }
