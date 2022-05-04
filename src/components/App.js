@@ -1,28 +1,22 @@
 import React from 'react';
 import VerseSelect from './VerseSelect';
-import bible from '../apis/bibleapi';
+import bibleapi from '../apis/bibleapi';
 
 class App extends React.Component {
   state = {
     bibles: [],
     bibleSelected: 'de4e12af7f28f599-01',
-    books: [],
-    bookSelected: null,
-    // chapters: [],
-    // chapterSelected: null,
-    // verses: [],
-    // VerseSelected: null,
   };
 
   componentDidMount() {
-    this.bookFetching(this.state.bibleSelected);
+    this.bookFetch(this.state.bibleSelected);
   }
 
-  bookFetching = async (query) => {
-    const bibles = await bible.get();
-    const books = await bible.get(`/${query}/books`);
+  bookFetch = async (query) => {
+    // const bibles = await bibleapi.get();
+    const books = await bibleapi.get(`/${query}/books`);
     this.setState({
-      bibles: bibles,
+      // bibles: bibles,
       books: books.data.data,
     });
   };

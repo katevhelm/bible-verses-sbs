@@ -2,6 +2,7 @@ import React from 'react';
 
 const Dropdown = ({
   options,
+  valueDisplayed,
   optionsName,
   label,
   selectedValue,
@@ -9,8 +10,8 @@ const Dropdown = ({
 }) => {
   const list = options.map((option) => {
     return (
-      <option key={option.id} value={option.name}>
-        {option.name}
+      <option key={option.id} value={option[valueDisplayed]} id={option.id}>
+        {option[valueDisplayed]}
       </option>
     );
   });
