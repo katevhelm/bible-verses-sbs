@@ -6,6 +6,8 @@ class App extends React.Component {
   state = {
     bibles: [],
     bibleSelected: 'de4e12af7f28f599-01',
+    books: [],
+    bookSelected: null,
   };
 
   componentDidMount() {
