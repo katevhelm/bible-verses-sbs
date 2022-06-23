@@ -4,36 +4,39 @@ import bibleapi from '../apis/bibleapi';
 
 class VerseSelect extends React.Component {
   state = {
-    bookSelected: '',
-    bookSelectedId: '',
+    bookSelected: 'Genesis',
+    bookSelectedId: 'GEN',
     chapters: [],
     chapterSelected: '',
     chapterSelectedId: '',
     verses: [],
     verseSelected: '',
+    verseSelectedId: '',
   };
+
+  componentDidMount() {
+    this.chapterFetch(this.state.bookSelectedId);
+  }
 
   chapterFetch = async (query) => {
     const chapters = await bibleapi.get(
-      `/de4e12af7f28f599-01/books/${query}/chapters`
+      `/de4e12af7f28f599-02/books/${query}/chapters`
     );
-    this.setState({ chapters: chapters.data.data }, () =>
-      console.log(this.state.chapters)
-    );
+    // removing "intro" from chapters array
+    chapters.data.data.splice(0, 1);
+    this.setState({ chapters: chapters.data.data });
   };
 
   verseFetch = async (query) => {
     const verses = await bibleapi.get(
-      `/de4e12af7f28f599-01/chapters/${query}/verses`
+      `/de4e12af7f28f599-02/chapters/${query}/verses`
     );
     // reformat verses to get a number to display
     const versesPrepped = verses.data.data.map(({ id }, index) => ({
       id: id,
       number: index + 1,
     }));
-    this.setState({ verses: versesPrepped }, () =>
-      console.log(this.state.verses)
-    );
+    this.setState({ verses: versesPrepped });
   };
 
   onBookSelected = (e) => {
@@ -57,6 +60,19 @@ class VerseSelect extends React.Component {
     );
   };
 
+  onVerseSelected = (e) => {
+    // getting 'id' of the selected option
+    const index = e.target.selectedIndex;
+    const selectedId = e.target.childNodes[index].getAttribute('id');
+    this.setState(
+      {
+        verseSelected: e.target.value,
+        verseSelectedId: selectedId,
+      },
+      () => this.props.onReloadDisplay(this.state.verseSelectedId)
+    );
+  };
+
   render() {
     if (this.props.books.length === 0) {
       return;
@@ -64,7 +80,7 @@ class VerseSelect extends React.Component {
     return (
       <div>
         <h3>Choose a verse:</h3>
-        <form>
+        <form className="select-form">
           <Dropdown
             options={this.props.books}
             valueDisplayed="name"
@@ -86,6 +102,7 @@ class VerseSelect extends React.Component {
             valueDisplayed="number"
             optionsName="verses"
             label="Verse"
+            onSelectedChange={this.onVerseSelected}
             selectedValue={this.state.verseSelected}
           />
         </form>
